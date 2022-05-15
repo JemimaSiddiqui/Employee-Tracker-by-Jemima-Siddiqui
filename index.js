@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
         host: "localhost",
         port: 3306,
         user: "root",
-        password: "", // To enter your MySQL password here.
+        password: "Farkhanda7861!", // To enter your MySQL password here.
         database: "employees_db" // employee database 
     },
     console.log(`Connected to the courses_db database.`)
@@ -81,12 +81,13 @@ function runEmployeeDB() {
                 viewEmployeesByRole();
             break;
 
-            /*
+            
             // ** Add a DEPARTMENT **
             case "Add Department":
-                addDept();
+                addDepartment();
             break;
 
+            /*
             // ** Add a ROLE **
             case "Add Role":
                 addRole();
@@ -194,3 +195,76 @@ function viewEmployeesByRole() {
         runEmployeeDB()
     }) 
 }
+
+// Creating role array for when the user wants to add a new role 
+let roleArray = [];                                            
+function selectRole() {
+  connection.query("SELECT * FROM role", function(err, results) {
+    if (err) {
+        console.log(err);
+    }
+    for (var i = 0; i < results.length; i++) {
+      roleArray.push(results[i].title);
+    }
+  })
+  return roleArray;
+}
+
+// 
+let managerArray = [];
+function selectManager() {
+  connection.query("SELECT firstName, lastName FROM employees", function(err, results) {
+    if (err) {
+        console.log(err);
+    }
+    for (var i = 0; i < results.length; i++) {
+        managerArray.push(results[i].firstName);
+    }
+  })
+  return managerArray;
+}
+
+//
+var departmentArray = [];
+function selectDepartment() {
+  connection.query("SELECT * FROM department", function(err, results) {
+    if (err) {
+        console.log(err);
+    }
+    for (var i = 0; i < results.length; i++) {
+        departmentArray.push(results[i].name);
+    }
+})
+return departmentArray;
+}
+
+// For when the user wants to add a department 
+function addDepartment() { 
+    inquirer.prompt([
+        {
+          name: "name",
+          type: "input",
+          message: "What is the name of the department?"
+        },
+        {
+            name: "id",
+            type: "input",
+            message: "What is the department ID number?"
+          }
+
+    ]).then(function(answers) {
+        connection.query("INSERT INTO department SET ? ",
+            {
+              name: answers.name,
+              id: answers.id
+            },
+            function(err) {
+                if (err) {
+                    console.log(err);
+                }
+                console.log("Added " + answers.name + " to the database.");
+                runEmployeeDB();
+            }
+        )
+    })
+  }
