@@ -2,19 +2,24 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const consoleTable = require("console.table");
 
+
 // Creating connection with database
 const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3001,
-    user: "root",
-    password: "", // To enter your MySQL password here.
-    database: "employees_db" // employee database 
-  });
+        host: "localhost",
+        //port: 3306,
+        user: "root",
+        password: "", // To enter your MySQL password here.
+        database: "employees_db" // employee database 
+    },
+    console.log(`Connected to the courses_db database.`)
+);
 
 // Once connection is made, display the following 
 connection.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected as ID: " + connection.threadId);
+    if (err) {
+        console.log(err);
+    }
+    //console.log("Connected as ID: " + connection.threadId);
     console.clear();
     console.log ("********************************************");
     console.log ("");
@@ -52,6 +57,7 @@ function runEmployeeDB() {
                 viewAllEmployees();
             break;
 
+            /*
             // ** View all DEPARTMENTS **
             case "View All Departments":
                 viewAllDepts();
@@ -90,7 +96,7 @@ function runEmployeeDB() {
             // ** Update EMPLOYEE ROLE **
             case "Update Employee Role":
                 updateEmployeeRole();
-            break;
+            break;*/
 
             // ** EXIT the application ** 
             case "Exit":
@@ -104,3 +110,24 @@ function runEmployeeDB() {
             }
     })
 };
+
+// For when the user wants to view all employees 
+function viewAllEmployees() {
+    console.log("I am here"); 
+    /*connection.query("SELECT employees.firstName AS First_Name, employees.lastName AS Last_Name, role.title AS Title, role.salary AS Salary, department.name AS Department, CONCAT(e.firstName, ' ' ,e.lastName) AS Manager FROM employees INNER JOIN role on role.id = employees.roleID INNER JOIN department on department.id = role.departmentID LEFT JOIN employees e on employees.managerID = e.id;", 
+    function(err, results) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(""); 
+        console.log("** EMPLOYEES LIST **");
+        console.log(""); 
+        //console.table(results)
+        runEmployeeDB()
+    })*/ 
+    connection.query("SELECT * FROM employees", function (err, results, fields) {
+        console.log(results);
+        console.log(fields);  
+    });
+}
+

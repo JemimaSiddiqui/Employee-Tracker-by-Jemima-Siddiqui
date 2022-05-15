@@ -30,8 +30,6 @@ INSERT INTO role (title, salary, departmentID) VALUES ("HR Coordinator", 120000,
 -- lastName = VARCHAR(30) 
 -- roleID = INT 
 -- managerID = INT --> maybe NULL if no manager 
-
--- Seed Employees Info =================================================================================
 INSERT INTO employees (firstName, lastName, roleID, managerID) VALUES ('John', 'Coltrane',1, null );
 INSERT INTO employees (firstName, lastName, roleID, managerID) VALUES ('Lester', 'Young', 2, 1);
 INSERT INTO employees (firstName, lastName, roleID, managerID) VALUES ('Ella', 'Fitzgerald', 3, null);
