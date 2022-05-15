@@ -87,12 +87,13 @@ function runEmployeeDB() {
                 addDepartment();
             break;
 
-            /*
+            
             // ** Add a ROLE **
             case "Add Role":
                 addRole();
             break;
 
+            /*
             // ** Add an EMPLOYEE **
             case "Add Employee":
                 addEmployee();
@@ -267,4 +268,46 @@ function addDepartment() {
             }
         )
     })
-  }
+}
+
+// For when user wants to add a new role 
+function addRole() { 
+    connection.query("SELECT role.title AS Title, role.salary AS Salary FROM role LEFT JOIN department.name AS Department FROM department;",   function(err, res) {
+      inquirer.prompt([
+          {
+            name: "title",
+            type: "input",
+            message: "What is the name of the role?"
+          },
+          {
+            name: "salary",
+            type: "input",
+            message: "What is the salary of the role?"
+          } ,
+          {
+            name: "department",
+            type: "rawlist",
+            message: "Which department does the role belong to?",
+            choices: selectDepartment()
+          }
+      ]).then(function(answers) {
+          var deptId = selectDepartment().indexOf(answers.choice) + 1
+          connection.query(
+              "INSERT INTO role SET ?",
+              {
+                title: answers.title,
+                salary: answers.salary,
+                departmentID: deptId
+              },
+              function(err) {
+                if (err) {
+                    console.log(err);
+                }
+                console.log("Added " + answers.title + " to the database.");
+                runEmployeeDB();
+              }
+          )     
+      });
+    });
+}
+
