@@ -93,7 +93,7 @@ function runEmployeeDB() {
                 addRole();
             break;
 
-            /*
+            
             // ** Add an EMPLOYEE **
             case "Add Employee":
                 addEmployee();
@@ -102,7 +102,7 @@ function runEmployeeDB() {
             // ** Update EMPLOYEE ROLE **
             case "Update Employee Role":
                 updateEmployeeRole();
-            break;*/
+            break;
 
             // ** EXIT the application ** 
             case "Exit":
@@ -311,3 +311,94 @@ function addRole() {
     });
 }
 
+// For when the user wants to add a new employee to the database 
+function addEmployee() { 
+    inquirer.prompt([
+        {
+          name: "firstName",
+          type: "input",
+          message: "What is the employee's first name? "
+        },
+        {
+          name: "lastName",
+          type: "input",
+          message: "What is the employee's last name? "
+        },
+        {
+          name: "role",
+          type: "list",
+          message: "What is the employee's role? ",
+          choices: selectRole()
+        },
+        {
+            name: "choice",
+            type: "rawlist",
+            message: "Who is the employee's manager? ",
+            choices: selectManager()
+        }
+
+    ]).then(function (answers) {
+      var roleId = selectRole().indexOf(answers.role) + 1
+      var managerId = selectManager().indexOf(answers.choice) + 1
+      connection.query("INSERT INTO employees SET ?", 
+      {
+          firstName: answers.firstName,
+          lastName: answers.lastName,
+          managerID: managerId,
+          roleID: roleId
+          
+      }, 
+      function(err){
+        if (err) {
+            console.log(err);
+        }
+        console.log("Added " + answers.firstName + " " + answers.lastName + " to the database.")
+        runEmployeeDB()
+      })
+
+  })
+ }
+
+ // For when user wants to update employee role 
+ function updateEmployeeRole() {
+    connection.query("SELECT employees.lastName, role.title FROM employees JOIN role ON employees.roleID = role.id;", 
+    (err, res) => {
+        if (err) {
+            console.log(err);
+        }
+            inquirer.prompt([
+                {
+                    name: "lastName",
+                    type: "rawlist",
+                    choices: function () {
+                        var lastName = [];
+                        for (var i = 0; i < res.length; i++) {
+                            lastName.push(res[i].lastName);
+                        }
+                        return lastName;
+                    },
+                    message: "Which employees role do you want to update? Please select their last name. ",
+                },
+                {
+                    name: "role",
+                    type: "rawlist",
+                    message: "Which role do you want to assign the selected employee? ",
+                    choices: selectRole()
+                },
+            ]).then(function (answers) {
+                var roleId = selectRole().indexOf(answers.role) + 1;
+                connection.query("UPDATE employees SET lastName = ? WHERE roleID = ?",
+                    [
+                        answers.lastName,
+                        roleId
+                    ],
+                    function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        console.log("Updated employee's role");
+                        runEmployeeDB();
+                    });
+            });
+        });
+  }
