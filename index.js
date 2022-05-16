@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
         host: "localhost",
         port: 3306,
         user: "root",
-        password: "", // To enter your MySQL password here.
+        password: "Farkhanda7861!", // To enter your MySQL password here.
         database: "employees_db" // employee database 
     },
     console.log(`Connected to the courses_db database.`)
@@ -154,7 +154,9 @@ function viewAllDepartments() {
 
 // For when the user wants to view all the employee roles 
 function viewAllRoles() {
-    connection.query("SELECT role.id AS Deptartment_ID, role.title AS Title FROM role", 
+    connection.query("SELECT role.id AS Deptartment_ID, role.title AS Title, role.salary AS Salary, department.name AS Department FROM role JOIN department ON role.departmentID = department.id ORDER by department.id", 
+
+    //, department.name AS Department FROM department JOIN role ON department.id = role.departmentID"
     function(err, results) {
         if (err) {
             console.log(err);
@@ -387,10 +389,11 @@ function addEmployee() {
                 },
             ]).then(function (answers) {
                 var roleId = selectRole().indexOf(answers.role) + 1;
-                connection.query("UPDATE employees SET lastName = ? WHERE roleID = ?",
+                console.log(answers); 
+                connection.query("UPDATE employees SET roleID = ? WHERE lastName = ?",
                     [
-                        answers.lastName,
-                        roleId
+                        roleId, 
+                        answers.lastName
                     ],
                     function (err) {
                         if (err) {
