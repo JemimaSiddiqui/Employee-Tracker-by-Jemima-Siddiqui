@@ -70,13 +70,13 @@ function runEmployeeDB() {
             break;
                
             
-            // ** View all EMPLOYEES BY DEPARTMENT **
+            // ** View all EMPLOYEES BY DEPARTMENT - FOR TESTING + BONUS!!! **
             case "View All Employees by Department":
                 viewEmployeesByDepartment();
             break;
 
             
-            // ** View all EMPLOYEES BY ROLE **
+            // ** View all EMPLOYEES BY ROLE - FOR TESTING!!! **
             case "View All Employees by Role":
                 viewEmployeesByRole();
             break;
@@ -169,7 +169,7 @@ function viewAllRoles() {
     }) 
 }
 
-// For when the user wants to view employees by department 
+// For when the user wants to view employees by department - FOR TESTING + BONUS!!!
 function viewEmployeesByDepartment() {
     connection.query("SELECT employees.firstName AS First_Name, employees.lastName AS Last_Name, department.name AS Department FROM employees JOIN role ON employees.roleID = role.id JOIN department ON role.departmentID = department.id ORDER BY department.id;", 
     function(err, results) {
@@ -184,7 +184,7 @@ function viewEmployeesByDepartment() {
     }) 
 }
 
-// For when the user wants to view employees by role 
+// For when the user wants to view employees by role - FOR TESTING!!!
 function viewEmployeesByRole() {
     connection.query("SELECT employees.firstName AS First_Name, employees.lastName AS Last_Name, role.title AS Title FROM employees JOIN role ON employees.roleID = role.id ORDER BY role.id;", 
     function(err, results) {
@@ -389,7 +389,7 @@ function addEmployee() {
                 },
             ]).then(function (answers) {
                 var roleId = selectRole().indexOf(answers.role) + 1;
-                console.log(answers); 
+                //console.log(answers); -- TESTING 
                 connection.query("UPDATE employees SET roleID = ? WHERE lastName = ?",
                     [
                         roleId, 
