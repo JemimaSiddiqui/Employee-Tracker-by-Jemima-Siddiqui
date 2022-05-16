@@ -192,7 +192,7 @@ function viewEmployeesByRole() {
             console.log(err);
         }
         console.log(""); 
-        console.log("** EMPLOYEES BY DEPARTMENT LIST **");
+        console.log("** EMPLOYEES BY ROLE LIST **");
         console.log(""); 
         console.table(results)
         runEmployeeDB()
