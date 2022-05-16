@@ -106,11 +106,11 @@ function runEmployeeDB() {
 
             // ** EXIT the application ** 
             case "Exit":
-                console.log ("***********************************************");
+                console.log ("*******************************************************");
                 console.log ("");
                 console.log ("   YOU ARE EXITING THE EMPLOYEE DATABASE. THANK YOU!   ");
                 console.log ("");
-                console.log ("***********************************************");
+                console.log ("*******************************************************");
                 connection.end();
             break;
             }
